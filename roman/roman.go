@@ -2,10 +2,11 @@ package roman
 
 import (
 	"fmt"
+	"net/http"
 	"regexp"
 )
 
-func RomanToInt(){
+func RomanToInt(w http.ResponseWriter, r *http.Request){
 	var result uint = 0;
 	var romanInt string;
 	var romanArr []string;
