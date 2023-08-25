@@ -10,6 +10,18 @@ import (
 func RomanToInt(w http.ResponseWriter, r *http.Request) {
 	romanLowerCase := r.URL.Query().Get("query")
 	roman := strings.ToUpper(romanLowerCase)
+	result := ConvertRomanToInt(roman)
+	jsonData, err := json.Marshal(result)
+	if err != nil {
+		log.Println(err.Error())
+		status := http.StatusInternalServerError
+		http.Error(w, http.StatusText(status), status)
+		return
+	}
+	w.Write(jsonData)
+
+}
+func ConvertRomanToInt(roman string) (number int) {
 	result := 0
 	var romanArr []string
 	romanToInt := map[string]int{"M": 1000, "D": 500, "C": 100, "L": 50, "X": 10, "V": 5, "I": 1}
@@ -26,14 +38,5 @@ func RomanToInt(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	result += romanToInt[romanArr[len(romanArr)-1]]
-
-	jsonData, err := json.Marshal(result)
-	if err != nil {
-		log.Println(err.Error())
-		status := http.StatusInternalServerError
-		http.Error(w, http.StatusText(status), status)
-		return
-	}
-	w.Write(jsonData)
-
+	return result
 }
